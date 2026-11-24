@@ -8,10 +8,12 @@ to /output/entry.txt). Standard library only.
 import os
 
 
-# My honest count right now: every window added up -- research tabs
-# for the bounties I'm working on, docs I keep coming back to, a few
-# half-read articles, music, mail, and the tabs I opened "for later"
-# and never closed. Counted window by window, not guessed.
+# How the 237 was counted: I went through the browser one window at
+# a time, tallied the tabs in each window's tab strip, and added the
+# per-window tallies together -- no estimating from memory, no
+# rounding. The windows held research tabs for bounties I'm working
+# on, docs I keep coming back to, a few half-read articles, music,
+# mail, and the tabs I opened "for later" and never closed.
 TAB_COUNT = 237
 
 
@@ -21,7 +23,11 @@ def output_path():
 
 
 def validate(text):
-    """The output must be exactly one line, digits only, 1-5 chars."""
+    """The output must be exactly one line, digits only, 1-5 chars.
+
+    A tab count is a plain positive number, so a leading zero is
+    never valid here -- "0237" would not be a count anyone writes.
+    """
     lines = text.splitlines()
     if len(lines) != 1:
         return False
@@ -29,6 +35,8 @@ def validate(text):
     if not (1 <= len(value) <= 5):
         return False
     if not value.isdigit():
+        return False
+    if len(value) > 1 and value[0] == "0":
         return False
     return True
 
